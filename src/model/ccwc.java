@@ -8,29 +8,39 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ccwc {
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		try {
+			Scanner reader;
 			String filename = "", command = "";
+			long fileLength = 0;
 
-			if (args.length > 1) {
+			if (args.length == 2) {
 				command = args[0];
 				filename = args[1];
 			}
 
-			else {
+			else if (args.length == 1) {
 				filename = args[0];
+			}
+
+			if (filename.length() != 0) {
+				File file = new File(filename);
+				reader = new Scanner(file);
+				fileLength = file.length();
+			}
+
+			else {
+				reader = new Scanner(System.in);
 			}
 
 			if (!command.equals("-c") && !command.equals("-l") && !command.equals("-w") && !command.equals("-m") && !command.equals("")) {
 				throw new InvalidArgumentException("Invalid command line options! Must be '-c', '-l', '-w', '-m', or just filename");
 			}
 
-			File file = new File(filename);
-			Scanner reader = new Scanner(file);
-
 			switch (command) {
 				case "-c": {
-					System.out.printf("%d %s", file.length(), filename);
+					System.out.printf("%d %s", fileLength, filename);
 
 					break;
 				}
@@ -101,7 +111,7 @@ public class ccwc {
 
 					reader2.close();
 
-					System.out.printf("%d %d %d %s", lineCount, wordCount, file.length(), filename);
+					System.out.printf("%d %d %d %s", lineCount, wordCount, fileLength, filename);
 				}
 			}
 		}
