@@ -4,11 +4,14 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class WCTool {
+public class ccwc {
 	public static void main(String[] args) {
-		File file = new File("test.txt");
-
 		try {
+			if (!args[0].equals("-c")) {
+				throw new InvalidArgumentException("Invalid command line argument! Must be '-c'.");
+			}
+
+			File file = new File("test.txt");
 			Scanner reader = new Scanner(file);
 
 			while (reader.hasNextLine()) {
@@ -18,7 +21,11 @@ public class WCTool {
 			reader.close();
 		}
 
-		catch(FileNotFoundException fnfe) {
+		catch (InvalidArgumentException iae) {
+			System.out.println(iae.getMessage());
+		}
+
+		catch (FileNotFoundException fnfe) {
 			System.out.println("File not found!");
 		}
 	}
