@@ -10,16 +10,27 @@ import java.io.IOException;
 public class ccwc {
 	public static void main(String[] args) {
 		try {
-			if (!args[0].equals("-c") && !args[0].equals("-l") && !args[0].equals("-w") && !args[0].equals("-m")) {
-				throw new InvalidArgumentException("Invalid command line argument! Must be '-c', '-l', '-w', or '-m.");
+			String filename = "", command = "";
+
+			if (args.length > 1) {
+				command = args[0];
+				filename = args[1];
 			}
 
-			File file = new File(args[1]);
+			else {
+				filename = args[0];
+			}
+
+			if (!command.equals("-c") && !command.equals("-l") && !command.equals("-w") && !command.equals("-m") && !command.equals("")) {
+				throw new InvalidArgumentException("Invalid command line options! Must be '-c', '-l', '-w', '-m', or just filename");
+			}
+
+			File file = new File(filename);
 			Scanner reader = new Scanner(file);
 
-			switch (args[0]) {
+			switch (command) {
 				case "-c": {
-					System.out.printf("%d %s", file.length(), args[1]);
+					System.out.printf("%d %s", file.length(), filename);
 
 					break;
 				}
@@ -34,7 +45,7 @@ public class ccwc {
 
 					reader.close();
 
-					System.out.printf("%d %s", lineCount, args[1]);
+					System.out.printf("%d %s", lineCount, filename);
 
 					break;
 				}
@@ -49,13 +60,13 @@ public class ccwc {
 
 					reader.close();
 
-					System.out.printf("%d %s", wordCount, args[1]);
+					System.out.printf("%d %s", wordCount, filename);
 
 					break;
 				}
 
 				case "-m": {
-					BufferedReader read = new BufferedReader(new FileReader(args[1]));
+					BufferedReader read = new BufferedReader(new FileReader(filename));
 					int charCount = 0;
 
 					while (read.read() != -1) {
@@ -64,13 +75,33 @@ public class ccwc {
 
 					read.close();
 
-					System.out.printf("%d %s", charCount, args[1]);
+					System.out.printf("%d %s", charCount, filename);
 
 					break;
 				}
 
-				default: {
-					break;
+				case "": {
+					int lineCount = 0;
+
+					while (reader.hasNextLine()) {
+						reader.nextLine();
+						lineCount++;
+					}
+
+					reader.close();
+
+					File file2 = new File(filename);
+					Scanner reader2 = new Scanner(file2);
+					int wordCount = 0;
+
+					while (reader2.hasNext()) {
+						reader2.next();
+						wordCount++;
+					}
+
+					reader2.close();
+
+					System.out.printf("%d %d %d %s", lineCount, wordCount, file.length(), filename);
 				}
 			}
 		}
