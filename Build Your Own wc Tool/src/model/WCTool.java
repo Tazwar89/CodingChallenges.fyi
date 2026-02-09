@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ccwc {
+public class WCTool {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		try {
